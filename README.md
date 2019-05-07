@@ -24,11 +24,11 @@ Also, all blocked IPs will be saved in a `blacklist.txt`. You can change this fi
 
 In the same way, you could keep a `whitelist.txt`. Addresses in this file will NEVER be blocked by the firewall rule.
 
-By default the script will check only the last 1000 events in Security log. You can use the `-MaxEvents` parameter to change this number.
+By default the script will check only the last 1000 events in Security log. You can use the `-MaxEvents` parameter to change this number (0 = do not limit).
 
 
 
-## Other scripts
+## Other tools
 
 If you want a quick summary of failed logins, just run
 
@@ -36,6 +36,18 @@ If you want a quick summary of failed logins, just run
 Get-FailedLogons.ps1
 ```
 
-It will show the number of failed logons attempts for each source IP address.
+This will show the number of failed logons attempts for each source IP address.
 
-By default the script will check only the last 1000 events in Security log. You can use the `-MaxEvents` parameter to change this number.
+Alternatively, you can run it with `-ShowUsernames` parameter
+
+```powershell
+Get-FailedLogons.ps1 -ShowUsernames
+```
+
+which will show the same result but now grouped by usernames.
+
+By default the script will check only the last 1000 events in Security log. You can use the `-MaxEvents` parameter to change this number (0 = do not limit). e.g.:
+
+```powershell
+Get-FailedLogons.ps1 -MaxEvents 0
+```
