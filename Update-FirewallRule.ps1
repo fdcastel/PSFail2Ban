@@ -8,6 +8,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $blacklistFile = Join-Path $PSScriptRoot 'blacklist.txt'
+$whitelistFile = Join-Path $PSScriptRoot 'whitelist.txt'
 
 
 
@@ -37,6 +38,14 @@ function Get-BlockedIps {
 }
 
 
+
+function Get-AllowedIps {
+    # Get whitelisted IPs
+    Get-Content -Path $whitelistFile -Encoding Ascii -ErrorAction SilentlyContinue
+}
+
+
+
 #
 # Main
 #
@@ -47,6 +56,10 @@ $allIps = $failedIps + $blockedIps | Select-Object -Unique
 
 # Update blacklist
 $allIps | Out-File -FilePath $blacklistFile -Encoding ascii
+
+# Remove allowed IPs
+$allowedIps = Get-AllowedIps
+$allIps = $allIps | Where-Object { $_ -notin $allowedIps } | Sort-Object
 
 # Update firewall
 $ruleName = 'PSFail2Ban-Block-Failed-Logons'
