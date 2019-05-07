@@ -52,14 +52,14 @@ function Get-AllowedIps {
 
 $failedIps = Get-FailedIps
 $blockedIps = Get-BlockedIps
-$allIps = $failedIps + $blockedIps | Select-Object -Unique
+$allIps = $failedIps + $blockedIps | Select-Object -Unique | Sort-Object
 
 # Update blacklist
 $allIps | Out-File -FilePath $blacklistFile -Encoding ascii
 
 # Remove allowed IPs
 $allowedIps = Get-AllowedIps
-$allIps = $allIps | Where-Object { $_ -notin $allowedIps } | Sort-Object
+$allIps = $allIps | Where-Object { $_ -notin $allowedIps }
 
 # Update firewall
 $ruleName = 'PSFail2Ban-Block-Failed-Logons'
