@@ -2,7 +2,7 @@
 
 [CmdletBinding()]
 param(
-    [int]$MaxEvents = 1000
+    [int]$LastHours = 6
 )
 
 $ErrorActionPreference = 'Stop'
@@ -15,8 +15,8 @@ $whitelistFile = Join-Path $PSScriptRoot 'whitelist.txt'
 function Get-FailedIps {
     # Get IP addresses with more than 10 failed logon attempts
     $ExtraParams = @{}
-    if ($MaxEvents -gt 0) {
-        $ExtraParams = @{MaxEvents = $MaxEvents}
+    if ($LastHours -gt 0) {
+        $ExtraParams = @{LastHours = $LastHours}
     }
 
     $getFailedLogons = Join-Path $PSScriptRoot 'Get-FailedLogons.ps1'

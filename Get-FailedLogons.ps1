@@ -2,7 +2,7 @@
 
 [CmdletBinding()]
 param(
-    [int]$MaxEvents = 1000,
+    [int]$LastHours = 6,
     [Switch]$ShowUsernames = $false
 )
 
@@ -14,9 +14,9 @@ $ErrorActionPreference = 'Stop'
 # Returns the number of failed logons attempts for each source IP address.
 #
 
-$ExtraParams = @{}
-if ($MaxEvents -gt 0) {
-    $ExtraParams = @{MaxEvents = $MaxEvents}
+$filters = @{LogName="Security"; ID=4625 } 
+if ($LastHours -gt 0) {
+    $filters.StartTime = (Get-Date).AddHours($LastHours * -1)
 }
 
 if ($ShowUsernames) {
@@ -25,7 +25,7 @@ if ($ShowUsernames) {
     $propertyIndex = 19        # Source IP
 }
 
-Get-WinEvent -FilterHashTable @{LogName="Security"; ID=4625 } @ExtraParams |
+Get-WinEvent -FilterHashTable $filters |
     ForEach-Object {
         $_.Properties[$propertyIndex].Value
     } |
