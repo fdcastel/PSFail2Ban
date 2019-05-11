@@ -52,7 +52,7 @@ function Get-AllowedIps {
 
 $failedIps = Get-FailedIps
 $blockedIps = Get-BlockedIps
-$allIps = $failedIps + $blockedIps | Select-Object -Unique | Sort-Object
+$allIps = [array]$failedIps + [array]$blockedIps | Select-Object -Unique | Sort-Object
 
 # Update blacklist
 $allIps | Out-File -FilePath $blacklistFile -Encoding ascii
